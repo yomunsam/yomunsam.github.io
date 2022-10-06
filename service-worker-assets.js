@@ -5,7 +5,11 @@
       "url": "_framework\/blazor.webassembly.js"
     },
     {
-      "hash": "sha256-e5VOmJNcZ7E9f0NwYl6fA5qEmgqaCScqqP9QpnVvngQ=",
+      "hash": "sha256-DCornv7RwGmh5F2M7NdY9Sg66xjw779ggSN9nS\/Br5o=",
+      "url": "_framework\/dotnet.timezones.blat"
+    },
+    {
+      "hash": "sha256-2ArzodKn12Y08qykx8wCbU+z1iJH8CW19mui08COj0I=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -133,7 +137,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-Ltd6we\/t4MzlG8qcjK8C0MoYQdT9kQdQc8Cxc+9OTvI=",
+      "hash": "sha256-6FaqzWDtImS7Y1DpAi+R9ukYFf7CxirV4xGyfxv8xeQ=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -161,19 +165,19 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-APlOajN2pVieZnC0qFFlNNxbknUI8yQg5uveuo0peuc=",
+      "hash": "sha256-RJTTASVYWqpYySxUcaQ23fVleOG8AWFS4W2gzggmMnE=",
       "url": "_framework\/Takina.Core.dll"
     },
     {
-      "hash": "sha256-RLXp3NO3d7so5fOFQwi8\/oYiES\/Vp24fiAqkkAc7ml0=",
+      "hash": "sha256-cUQ+k1\/LWKUGZQ93FWuyTyA4M0vXq3tsxyRK3s7fnFA=",
       "url": "_framework\/Takina.Infrastructure.Shared.dll"
     },
     {
-      "hash": "sha256-TpIcb3s2zsRhUKkIJIMLKmkTauiAx+QnebpFLp\/6LxU=",
+      "hash": "sha256-NphBbKtxOsXEaB6P8Pz4Dbg3C7f+dffMGgya6X+RzzI=",
       "url": "_framework\/Takina.Infrastructure.WebAssembly.dll"
     },
     {
-      "hash": "sha256-aJx5lPJOLzJGHt\/uufSgJ6bhe27y9Mo7ronoRbLeCWY=",
+      "hash": "sha256-O71UlEJmTAVNDogMkutqShjzBGAHQUzJWrF1onnnUkQ=",
       "url": "_framework\/Takina.WebPage.dll"
     },
     {
@@ -181,11 +185,11 @@
       "url": "_framework\/dotnet.6.0.9.q3lm24mrwt.js"
     },
     {
-      "hash": "sha256-rpPbfwNDxx4LMDvZu1BaYaL\/1oW6uQTPYXSWF1NRF9E=",
+      "hash": "sha256-o5f1bRKsFXLfJwlLjeRrvc4FaB1v1HbOEP3uWdJv8wc=",
       "url": "_framework\/dotnet.wasm"
     },
     {
-      "hash": "sha256-EQsbWTZ0G7aWLmPDK6HPL0Za9DrZTmHUZLZRKbNfa\/0=",
+      "hash": "sha256-LiB4lRORBCnYO5uwwoWDL0ZmuHTj676yBayc3o9L8NQ=",
       "url": "appsettings.json"
     },
     {
@@ -193,7 +197,7 @@
       "url": "appsettings.Production.json"
     },
     {
-      "hash": "sha256-VSAimF4YHoaDBK6tC7WgcNZfJqZT6SOENo\/Exc186d8=",
+      "hash": "sha256-T\/4li4jb5Hujsi5jQihoVC0UAiVOnQWXnmtrsXtBW\/Y=",
       "url": "Takina.WebPage.styles.css"
     },
     {
@@ -205,7 +209,7 @@
       "url": "404.html"
     },
     {
-      "hash": "sha256-v2X\/hsxHo3v\/9kabxpP4zL4ldQDxaDFavcyoiihtSvI=",
+      "hash": "sha256-ldz+ZgL6u\/tpZgsKlO\/x87sjQP0wSdIAghS2cRQkfEg=",
       "url": "blog\/catalog\/catalog_1.json"
     },
     {
@@ -221,7 +225,7 @@
       "url": "blog\/posts\/2\/assets\/thumbnail.png"
     },
     {
-      "hash": "sha256-RiQNGH1V\/EYXR6ORo2GOL8UCF+S+rCyNw3MV7DIFKn4=",
+      "hash": "sha256-WblndytTzh4eb\/DGcwgczutPapk1RMkadj1b6lvjRHk=",
       "url": "blog\/posts\/2\/index.html"
     },
     {
@@ -405,11 +409,11 @@
       "url": "blog\/posts\/728\/assets\/7.png"
     },
     {
-      "hash": "sha256-\/xgYJdzTAMsju5U5Llt\/tG702piPtcZWj5eZtjI5zc8=",
+      "hash": "sha256-iEfQouu0KVVlyJmchftS\/3WybwzHh96q7knlkX8Bspk=",
       "url": "blog\/posts\/728\/index.html"
     },
     {
-      "hash": "sha256-cNLtQ2ukRIGWW1VYKAEHFtKS398shvRdzILVas1CjMs=",
+      "hash": "sha256-ffM4N0ssLUAXtMRRNhXk\/djXGdcATO8e7ajkH4yZbC0=",
       "url": "blog\/posts\/728\/meta.json"
     },
     {
@@ -617,5 +621,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "qr2CkCQ7"
+  "version": "AQlpbfgC"
 };

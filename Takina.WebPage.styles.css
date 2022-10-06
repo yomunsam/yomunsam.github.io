@@ -19,6 +19,44 @@
     object-position: 50% 26%;
 }
 /* /Pages/Post/Index.razor.rz.scp.css */
+.post-card[b-k8nry1m3ny] {
+    border-radius: .45rem;
+}
+
+.cover-div[b-k8nry1m3ny] {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-top-left-radius: .45rem;
+    border-top-right-radius: .45rem;
+    background-color: #00000010;
+}
+
+[data-bs-color-scheme=dark] .cover-div[b-k8nry1m3ny] {
+    background-color: #FFFFFF10;
+}
+
+.cover-img[b-k8nry1m3ny] {
+    display: inline-block;
+    object-fit: cover;
+    object-position: 50% 26%;
+    border-top-left-radius: .45rem;
+    border-top-right-radius: .45rem;
+}
+
+.post-title[b-k8nry1m3ny] {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+.author-head-img[b-k8nry1m3ny] {
+    border-radius: 50%;
+    justify-self:center;
+    max-height:1.6rem;
+    max-width:1.6rem;
+    margin-right: .16rem;
+}
 /* /Shared/MainLayout.razor.rz.scp.css */
 .page[b-mfcob2m21r] {
     padding-top: 3.5rem;
