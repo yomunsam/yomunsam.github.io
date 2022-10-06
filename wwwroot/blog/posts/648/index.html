@@ -1,0 +1,160 @@
+﻿<p>在这篇文章，我们来试着搭建一个完备可用的Asp .net core WebApi项目，以便我们后续的业务开发。</p>
+<h1 id="section">创建工程</h1>
+<p>首先第一步自然就是创建一个新的工程了，直接创建一个最简单的啥都没有的的api工程即可</p>
+<pre><code class="language-powershell">dotnet new webapi -o ProjectName
+</code></pre>
+<p><img src="blog/posts/648/assets/1.png" class="img-fluid" alt="" /></p>
+<hr />
+<h1 id="service-extensions">Service Extensions</h1>
+<p>C#有个非常有趣的扩展方法功能，利用它，我们可以把代码搞得更加整洁一点。</p>
+<p>新建一个静态类，我们把它叫做ServiceExtensions</p>
+<p><img src="blog/posts/648/assets/2.png" class="img-fluid" alt="" /></p>
+<p>然后，所有配置依赖注入服务相关的东西，我们都使用扩展方法的形式写在这里，这样一来，Startup类里面就会简洁许多。</p>
+<hr />
+<h1 id="openid-connect">OpenID Connect</h1>
+<p>通常，我们的项目使用OIDC （OpenID Connect）Jwt Bearer 来保护Api资源，所以我们先来配置oidc相关内容。</p>
+<p>首先我们需要引入一个Nuget包</p>
+<p><img src="blog/posts/648/assets/3.png" class="img-fluid" alt="" /></p>
+<p><code>IdentityServer4.AccessTokenValidation</code></p>
+<p>这里我们直接使用IdentityServer4提供的包，当然也可以使用别的，比如Microsoft.AspNetCore.Authentication.JwtBearer等等</p>
+<p>然后我们在ServiceExtensions中编写代码如下：</p>
+<pre><code class="language-csharp">using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Meow.Api
+{
+    public static class ServiceExtensions
+    {
+        public static void AddAuthenticationWithOIDC(this IServiceCollection services , IConfiguration configuration)
+        {
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =&gt;
+                {
+                    options.Authority = configuration[&quot;Oidc:Authority&quot;];
+                    options.ApiName = configuration[&quot;Oidc:ApiName&quot;];
+                    options.RequireHttpsMetadata = configuration.GetValue&lt;bool&gt;(&quot;Oidc:RequireHttps&quot;);
+                });
+        }
+    }
+}
+
+</code></pre>
+<p>其中&quot;Oidc:Authority&quot;等相关配置项需要写到&quot;appsettings.json&quot;中。</p>
+<p>然后，我们通过上面的扩展方法，向Startup的ConfigureServices配置Oidc相关内容：</p>
+<p><img src="blog/posts/648/assets/4.png" class="img-fluid" alt="" /></p>
+<p>同样的，我们得配置一下管道</p>
+<p><img src="blog/posts/648/assets/5.png" class="img-fluid" alt="" /></p>
+<hr />
+<h2 id="swagger">Swagger</h2>
+<p>对于WebApi项目来说，Swagger是个非常有用的大宝贝。尤其在调试Api时候，网页上直接点点就完事了，省的去开postman了，非常方便。</p>
+<p>首先，依然是先添加个Nuget包进来：</p>
+<p><img src="blog/posts/648/assets/6.png" class="img-fluid" alt="" /></p>
+<p><code>Swashbuckle.AspNetCore</code></p>
+<p><img src="blog/posts/648/assets/7.png" class="img-fluid" alt="" /></p>
+<p><code>Swashbuckle.AspNetCore.SwaggerGen</code></p>
+<p>然后继续编写扩展方法：</p>
+<pre><code class="language-csharp">public static void AddSwagger(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSwaggerGen(options =&gt;
+            {
+                options.SwaggerDoc(&quot;v1&quot;, new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = configuration[&quot;Swagger:v1:Title&quot;],
+                    Version = configuration[&quot;Swagger:v1:VersionName&quot;],
+                    Description = configuration[&quot;Swagger:v1:Desc&quot;],
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $&quot;{Assembly.GetExecutingAssembly().GetName().Name}.xml&quot;;
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
+
+                //Auth
+                var dict_scopes = new Dictionary&lt;string, string&gt;();
+                string[] scopes_arr = configuration.GetSection(&quot;Swagger:Oidc:Scopes&quot;).Get&lt;string[]&gt;();
+                string[] scopes_desc_arr = configuration.GetSection(&quot;Swagger:Oidc:ScopesDesc&quot;).Get&lt;string[]&gt;();
+                for(var i = 0; i &lt; scopes_arr.Length; i++)
+                {
+                    dict_scopes.Add(scopes_arr[i], (scopes_desc_arr.Length &gt; i) ? scopes_desc_arr[i] : scopes_arr[i]);
+                }
+                options.AddSecurityDefinition(&quot;oidc&quot;, new OpenApiSecurityScheme 
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($&quot;{configuration[&quot;Oidc:Authority&quot;]}/connect/authorize&quot;),
+                            Scopes = dict_scopes
+                        }
+                    }
+                });
+
+                options.OperationFilter&lt;AuthResponsesOperationFilter&gt;();
+            });
+        }
+</code></pre>
+<p>这里就有点复杂了，一样样来，</p>
+<p>首先，这样直接运行会报错，因为默认情况下这个工程不会生成xml文档，而我们Swagger是需要xml文档来读取注释信息的，于是就报错了，我们得改改。</p>
+<p>打开这个项目的.csproj文件，添加如下：</p>
+<p><img src="blog/posts/648/assets/8.png" class="img-fluid" alt="" /></p>
+<pre><code class="language-xml">&lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netcoreapp3.1&lt;/TargetFramework&gt;
+    &lt;GenerateDocumentationFile&gt;true&lt;/GenerateDocumentationFile&gt;
+    &lt;NoWarn&gt;$(NoWarn);1591&lt;/NoWarn&gt;
+&lt;/PropertyGroup&gt;
+</code></pre>
+<p>Swagger部分对应的appsetting.json配置如下：</p>
+<p><img src="blog/posts/648/assets/9.png" class="img-fluid" alt="" /></p>
+<p>然后，最后<code>options.OperationFilter&lt;AuthResponsesOperationFilter&gt;();</code> 这一句中的AuthResponsesOperationFilter，代码如下：</p>
+<pre><code class="language-csharp">using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace Meow.Api
+{
+    public class AuthResponsesOperationFilter : IOperationFilter
+    {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+                .Union(context.MethodInfo.GetCustomAttributes(true))
+                .OfType&lt;AuthorizeAttribute&gt;()
+                .Any();
+
+            if (hasAuthorize)
+            {
+                operation.Responses.Add(&quot;401&quot;, new OpenApiResponse { Description = &quot;暂无权限访问&quot; });
+                operation.Responses.Add(&quot;403&quot;, new OpenApiResponse { Description = &quot;禁止访问&quot; });
+
+                operation.Security = new List&lt;OpenApiSecurityRequirement&gt;();
+                operation.Security.Add(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = &quot;oidc&quot; }
+                        },
+                        new[] { &quot;Api1&quot; , &quot;openid&quot; } //这里改成你自己的Scopes
+                    }
+                });
+            }
+        }
+    }
+}
+
+</code></pre>
+<p>最后给它添加到Startup类里</p>
+<p><img src="blog/posts/648/assets/10.png" class="img-fluid" alt="" /></p>
+<p>同样的，有部分内容需要添加到管线中:</p>
+<p><img src="blog/posts/648/assets/11.png" class="img-fluid" alt="" /></p>
+<p>之后，我们就可以访问到Swagger的页面了</p>
+<p><img src="blog/posts/648/assets/12.png" class="img-fluid" alt="" /></p>
+<p>点击右边的绿色按钮，我们可以直接跳转登录，然后就可以测试带有身份验证的Api了。</p>
+<p><img src="blog/posts/648/assets/13.png" class="img-fluid" alt="" /></p>
+<p><img src="blog/posts/648/assets/14.png" class="img-fluid" alt="" /></p>

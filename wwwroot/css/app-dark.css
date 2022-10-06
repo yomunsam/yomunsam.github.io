@@ -1,0 +1,40 @@
+﻿[data-bs-color-scheme=light] #btn-switch-light {
+    display: none;
+}
+
+[data-bs-color-scheme=dark] #btn-switch-dark {
+    display: none;
+}
+
+
+[data-bs-color-scheme=dark] .app-nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: rgba(255,255,255,.12);
+}
+
+
+[data-bs-color-scheme=dark] .post-content {
+    color: #c4c6c9;
+}
+
+
+[data-bs-color-scheme=dark] h1 {
+    color: #dddad5;
+}
+
+[data-bs-color-scheme=dark] .post-content .blockquote {
+    background-color: #282b2c;
+}
+
+[data-bs-color-scheme=dark] .post-content code:not(:has(span)) {
+    background-color: #6ed6ca10;
+}
+
+
+[data-bs-color-scheme=dark] .post-content a:link {
+    color: #73abfd;
+}
+
+
+[data-bs-color-scheme=dark] .post-content a:visited {
+    color: #73abfd;
+}

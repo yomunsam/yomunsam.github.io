@@ -1,0 +1,273 @@
+﻿<h1 id="c">C#与可空类型与依赖注入</h1>
+<p>这是我最近做一些关于依赖注入功能时候遇到的事情，顺便就写点东西记录一下。</p>
+<h2 id="section">可空类型</h2>
+<p>故事是这样的，首先是C#有一个可空值类型的概念：</p>
+<pre><code class="language-csharp">int? i = null;
+i = 10;
+</code></pre>
+<p>这个概念很早就有了，没记错的话可能在C# 5或者更早的时候，所以我们就不展开说了。。然后最近十一月新出的C# 10 / .NET 6 出了个新东西，可空引用类型，大概这样：</p>
+<pre><code class="language-csharp">string? str = null;
+str = &quot;Hello World&quot;;
+</code></pre>
+<p>当然这个东西其实C# 8.x的时候就有了，只是从 .NET 6 开始，这个东西在新项目中默认开启了。（但C# 10相比8对这个东西有一些改进，本文以10版本说明）</p>
+<p>不过这个新东西会让一些刚看到的开发者困惑，可空值类型好理解，原本<code>int</code>、<code>float</code>这类的值类型是没法直接设为null的，你就是不给初始值也会有个默认值<code>0</code>. 但这个可空引用类型又是咋回事呢？引用类型本来就可以设为<code>null</code>啊，为啥要多此一举呢？</p>
+<p>这就得稍微介绍下这个新特性了。</p>
+<p>可空引用类型</p>
+<hr />
+<p>如果在 .NET 6 / C# 10 环境下新建一个项目，编写如下代码</p>
+<pre><code class="language-csharp">string str = null;
+str = &quot;Hello World&quot;;
+Console.WriteLine(str);
+</code></pre>
+<p>(<code>Console.WriteLine</code>是控制台输出，看我写东西的读者可能Unity开发者偏多，没见过这个，可以粗略的认为它类似于Unity的<code>Debug.Log</code>)</p>
+<p>这个在以前是很平常的代码，但在 <code>.NET 6 / C# 10</code>环境下却会得到一个警告。</p>
+<p><img src="blog/posts/728/assets/1.png" class="img-fluid" alt="出现警告" title="出现警告" /></p>
+<p>意思大概就是，新的项目默认都启用了“可空引用类型”这个特性，于是现在默认情况下，它是不允许我们给引用类型赋值为<code>null</code>的。</p>
+<p>那我们要让它可以被赋值成<code>null</code>怎么办呢？加个问号：</p>
+<pre><code class="language-csharp">string? str = null;
+</code></pre>
+<p>那么为什么新的C#要改成这样呢？简单来说，首先是降低代码在运行时引发空引用异常（<code>System.NullReferenceException</code>）的可能性，它会在编写代码的时候就进行分析并对可能为null的地方提出警告。然后就是这一做法会让程序在运行时带来一些效率上的提高，这个就不展开说了。</p>
+<p>然后这个新特性会直接导致我们写代码的习惯发生比较大的变化，一开始会很不适应，需要一些时间来改变思维方式。</p>
+<p>首先是，所有我们代码可能会需要变成null的地方，都需要加问号.</p>
+<pre><code class="language-csharp">//变量
+string str? = null;
+var str2 = &quot;hello&quot;; //用var声明也会默认先推断成&quot;string?&quot;然后再在编译阶段进一步优化。
+
+//方法
+public void Foo(string? msg) =&gt; xxx;
+</code></pre>
+<p>刚换到新版本这种写法感觉最别扭的地方之一就是，写class的时候, 各种public的东西也得给默认值。</p>
+<pre><code class="language-csharp">public class MeowDto
+{
+    public string Name { get; set; } = string.Empty; //给默认值
+}
+
+//或
+
+public class MeowDto
+{
+    public string? Name { get; set; } //声明可空
+}
+
+//或
+
+public class MeowDto
+{
+    public MeowDto(string name) //构造函数赋值
+    {
+        this.Name = name;
+    }
+
+    public string Name { get; set; }
+}
+</code></pre>
+<p>在一个接受不可空参数的方法中传入可空的值，也会出现警告：</p>
+<p><img src="blog/posts/728/assets/2.png" class="img-fluid" alt="" /></p>
+<p>于是对应的解决方法，可以在调用前加判空：</p>
+<p><img src="blog/posts/728/assets/3.png" class="img-fluid" alt="" /></p>
+<p>或者在传参的时候给变量后面加个<code>!</code>符号，告诉编译器我觉得这儿没问题了，你别管它。</p>
+<p><img src="blog/posts/728/assets/4.png" class="img-fluid" alt="" /></p>
+<p>就像<code>?.</code>语法糖一样，现在也有对应的<code>!.</code>写法。</p>
+<pre><code class="language-csharp">MeowDto? dto = Context.Payload?.Get&lt;MeowDto&gt;();
+logger.Information(dto!.Name);
+//(上面具体内容是我瞎编的)
+</code></pre>
+<br>
+<h2 id="section-1">依赖注入</h2>
+<p>关于可空类型的介绍大概就是上面这些了，接下来我们说说依赖注入的问题。（下面的东西对于大部分开发者来说没啥用，您也可以关掉页面不往下看了。）</p>
+<p>比如说我们有如下一个类需要实现依赖注入:</p>
+<pre><code class="language-csharp">public class Meow
+{
+    [Inject]
+    public IMeowService? MeowService { get; set; }
+
+    [Inject]
+    public int? Num { get; set; }
+
+    //属性没啥实际意义，瞎编的。
+}
+</code></pre>
+<p>这里例子用的是属性注入，属性注入通常用途更多一些，不仅仅是服务容器的注入，比如Asp .Net Core注入请求参数啥的也都是类似的实现方法。当然，构造方法注入也是同一个道理。</p>
+<p>这里我们顺便也可以看到，如果我们不想给初始值的话，就都用<code>?</code>符号声明成可空的形式了。</p>
+<p>然后如果要对这个类的实例进行属性注入的话，通常我们就使用反射了。</p>
+<pre><code class="language-csharp">using System.Reflection;
+
+Meow meow = new Meow(); //随便通过什么方式得到一个实例
+var properties = typeof(Meow).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+    .Where(p =&gt; p.IsDefined(typeof(InjectAttribute))).ToArray();
+
+foreach (var property in properties)
+    Console.WriteLine(property.Name);
+</code></pre>
+<p>得到属性信息之后，下一步我们就得知道它们的类型了。</p>
+<p>那么它们分别是什么类型呢，首先看<code>int?</code> 可空值类型。</p>
+<p><img src="blog/posts/728/assets/5.png" class="img-fluid" alt="" /></p>
+<p>其实<code>int?</code>就相当于是<code>System.Nullable&lt;int&gt;</code>这么个类型：</p>
+<p><img src="blog/posts/728/assets/6.png" class="img-fluid" alt="" /></p>
+<p>那么，接下来我们要怎么通过反射为它赋值呢，像这样：</p>
+<pre><code class="language-csharp">using System.Reflection;
+
+Meow meow = new Meow(); //随便通过什么方式得到一个实例
+var properties = typeof(Meow).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+    .Where(p =&gt; p.IsDefined(typeof(InjectAttribute))).ToArray();
+
+foreach (var property in properties)
+{
+    if (property.PropertyType.IsValueType) //首先判断这是个值类型
+    {
+        if(property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable&lt;&gt;)) //判读nullable值类型
+        {
+            var propertyType = property.PropertyType.GetGenericArguments()[0]; //获取真实的值类型
+            if(propertyType == typeof(int)) //以下是简化写法，现实生活中没有这么干的
+            {
+                property.SetValue(meow, 10); //赋值直接不用管nullable，直接赋值int就行
+                continue;
+            }
+        }
+    }
+}
+</code></pre>
+<p>（注：C# 10 / .NET 6 默认有隐式using的功能，所以你看到的代码中只using了一个命名空间。）</p>
+<p>然后，怎么反射给可空引用类型赋值呢？</p>
+<p>其实，可空引用类型的<code>PropertyType</code>和普通的类型没啥区别：</p>
+<pre><code class="language-csharp">if (property.PropertyType == typeof(IMeowService)) //以下是简化写法，现实生活中没有这么干的
+{
+    property.SetValue(meow, new MeowService());
+}
+</code></pre>
+<p>有些时候，我们可能需要明确需要知道这个引用类型到底是不是可空引用类型，比如Asp .Net Core 6在做模型验证的时候，会给不可空的类型搞一个类似<code>[Required]</code>的效果。</p>
+<p>那么，怎么做呢？</p>
+<p>有两种方法，第一种是我在StackOverflow找到的，适用于C# 8以上版本.</p>
+<pre><code class="language-csharp">if (property.PropertyType == typeof(IMeowService))
+{
+    bool b_nullable = IsNullable(property.PropertyType, property.DeclaringType, property.CustomAttributes);
+
+    Console.WriteLine(b_nullable);
+    continue;
+}
+
+static bool IsNullable(Type memberType, MemberInfo? declaringType, IEnumerable&lt;CustomAttributeData&gt; customAttributes)
+{
+    if (memberType.IsValueType)
+        return Nullable.GetUnderlyingType(memberType) != null;
+
+    var nullable = customAttributes.FirstOrDefault(x =&gt; x.AttributeType.FullName == &quot;System.Runtime.CompilerServices.NullableAttribute&quot;);
+    if (nullable != null &amp;&amp; nullable.ConstructorArguments.Count == 1)
+    {
+        var attributeArg = nullable.ConstructorArguments[0];
+        if (attributeArg.ArgumentType == typeof(byte[]))
+        {
+            var _args = (ReadOnlyCollection&lt;CustomAttributeTypedArgument&gt;)attributeArg.Value!;
+            if (_args.Count &gt; 0 &amp;&amp; _args[0].ArgumentType == typeof(byte))
+            {
+                return (byte)_args[0].Value! == 2;
+            }
+        }
+        else if (attributeArg.ArgumentType == typeof(byte))
+        {
+            return (byte)attributeArg.Value! == 2;
+        }
+    }
+
+    for (var type = declaringType; type != null; type = type.DeclaringType)
+    {
+        var context = type.CustomAttributes.FirstOrDefault(x =&gt; x.AttributeType.FullName == &quot;System.Runtime.CompilerServices.NullableContextAttribute&quot;);
+        if (context != null
+            &amp;&amp; context.ConstructorArguments.Count == 1
+            &amp;&amp; context.ConstructorArguments[0].ArgumentType == typeof(byte))
+        {
+            return (byte)context.ConstructorArguments[0].Value! == 2;
+        }
+    }
+    return false;
+}
+</code></pre>
+<p>以上代码参考的来源是这个：</p>
+<p><a href="https://stackoverflow.com/questions/58453972/how-to-use-net-reflection-to-check-for-nullable-reference-type">https://stackoverflow.com/questions/58453972/how-to-use-net-reflection-to-check-for-nullable-reference-type</a></p>
+<p>但乍一看确实也云里雾里的，啥意思呢？</p>
+<p>首先，如果声明了一个可空引用类型的属性或者字段的话，那么<strong>有可能</strong>在这个属性或字段上被编译器直接加了一个Attribute叫<code>System.Runtime.CompilerServices.NullableAttribute</code>, 也有可能没有.</p>
+<p>这个Attribute仅供编译器使用的，你在自己的代码里是不让用的，所以我们这儿是用字符串判断的。它大概长这样：</p>
+<pre><code class="language-csharp">namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(
+        AttributeTargets.Class |
+        AttributeTargets.Event |
+        AttributeTargets.Field |
+        AttributeTargets.GenericParameter |
+        AttributeTargets.Parameter |
+        AttributeTargets.Property |
+        AttributeTargets.ReturnValue,
+        AllowMultiple = false,
+        Inherited = false)]
+    public sealed class NullableAttribute : Attribute
+    {
+        public readonly byte[] NullableFlags;
+        public NullableAttribute(byte flag)
+        {
+            NullableFlags = new byte[] { flag };
+        }
+        public NullableAttribute(byte[] flags)
+        {
+            NullableFlags = flags;
+        }
+    }
+}
+</code></pre>
+<p>我们代码里一开始就是在property上找它，这里面其中有用的东西就是<code>NullableFlags</code>,它什么意思呢，在C#的编译器roslyn的GitHub页面上有这么个描述:</p>
+<blockquote class="blockquote">
+<p>Each type reference in metadata may have an associated NullableAttribute with a byte[] where each byte represents nullability: 0 for oblivious, 1 for not annotated, and 2 for annotated.</p>
+</blockquote>
+<p>所以我们上文代码在判断这个&quot;annotated&quot;，也就是<code>2</code>.</p>
+<p>然后我们所这个<code>NullableAttribute</code>可能有可能没有，如果没有的话，我们就需要在它的声明类型上找另一个东西<code>System.Runtime.CompilerServices.NullableContextAttribute</code>, 这也是一个仅供编译器使用的类，它长这样：</p>
+<pre><code class="language-csharp">namespace System.Runtime.CompilerServices
+{
+    [System.AttributeUsage(
+        AttributeTargets.Class |
+        AttributeTargets.Delegate |
+        AttributeTargets.Interface |
+        AttributeTargets.Method |
+        AttributeTargets.Struct,
+        AllowMultiple = false,
+        Inherited = false)]
+    public sealed class NullableContextAttribute : Attribute
+    {
+        public readonly byte Flag;
+        public NullableContextAttribute(byte flag)
+        {
+            Flag = flag;
+        }
+    }
+}
+</code></pre>
+<p>比如在我们的案例中可以这么打印一下瞧瞧：</p>
+<p><img src="blog/posts/728/assets/7.png" class="img-fluid" alt="" /></p>
+<p>可以看到这两个Attribute都被放到我们的class上了，而property上其实是没有的。</p>
+<p>更多相关细节可以参考：</p>
+<ul>
+<li><a href="https://github.com/dotnet/roslyn/blob/main/docs/features/nullable-metadata.md">Roslyn在Github上的相关描述</a></li>
+</ul>
+<p>然后对于 <strong>.NET 6以上版本</strong>的话，我们就不用管上面那堆东西了，有简化的方法，于是就成了这样：</p>
+<pre><code class="language-csharp">using System.Reflection;
+
+Meow meow = new Meow(); //随便通过什么方式得到一个实例
+var properties = typeof(Meow).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+    .Where(p =&gt; p.IsDefined(typeof(InjectAttribute))).ToArray();
+
+NullabilityInfoContext nullabilityInfoContext = new NullabilityInfoContext();
+
+foreach (var property in properties)
+{
+    if (property.PropertyType.IsValueType)
+    {
+        //略
+    }
+
+    if (property.PropertyType == typeof(IMeowService)) //简化写法，现实生活中别这么干
+    {
+        var nullabilityInfo = nullabilityInfoContext.Create(property);
+        if (nullabilityInfo.WriteState is NullabilityState.Nullable)
+            Console.WriteLine(&quot;这是可空引用类型&quot;);
+    }
+}
+</code></pre>
+<p>相关的讨论在这儿：<a href="https://github.com/dotnet/runtime/issues/29723">https://github.com/dotnet/runtime/issues/29723</a></p>

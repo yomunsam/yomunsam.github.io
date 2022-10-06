@@ -1,0 +1,97 @@
+/* /Components/PostList.razor.rz.scp.css */
+.tag-span[b-rphpc9kcaj] {
+    background-color: #00000006;
+    color: #f23051;
+    font-size:.85rem;
+}
+
+
+.post-thumbnail[b-rphpc9kcaj] {
+    object-fit:cover;
+    width:100%;
+    max-height: 12rem;
+    object-position: 50% 26%;
+}
+/* /Pages/Index.razor.rz.scp.css */
+.main-cover[b-o4glogc3o0] {
+    max-height: 24rem;
+    object-fit: cover;
+    object-position: 50% 26%;
+}
+/* /Pages/Post/Index.razor.rz.scp.css */
+/* /Shared/MainLayout.razor.rz.scp.css */
+.page[b-mfcob2m21r] {
+    padding-top: 3.5rem;
+}
+/* /Shared/Navbar.razor.rz.scp.css */
+.navbar-bg[b-cvyqi03zr4] {
+    background-color: #3680e0 !important;
+}
+
+[data-bs-color-scheme=dark] .navbar-bg[b-cvyqi03zr4] {
+    background-color: #161616 !important;
+}
+
+/* /Shared/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-uwefg16lzg] {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-row[b-uwefg16lzg] {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand[b-uwefg16lzg] {
+    font-size: 1.1rem;
+}
+
+.oi[b-uwefg16lzg] {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-item[b-uwefg16lzg] {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type[b-uwefg16lzg] {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type[b-uwefg16lzg] {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item[b-uwefg16lzg]  a {
+        color: #d7d7d7;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+    }
+
+.nav-item[b-uwefg16lzg]  a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item[b-uwefg16lzg]  a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-uwefg16lzg] {
+        display: none;
+    }
+
+    .collapse[b-uwefg16lzg] {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+}

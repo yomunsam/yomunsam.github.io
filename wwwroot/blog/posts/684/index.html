@@ -1,0 +1,49 @@
+﻿<p>嘛，这估计是一个挺基础的话题了，网络上也有不少各式各样的折腾方法文章。不过折腾一遍发现，网络上讲的不少方法还是稍微有点繁琐了，不太符合我的风格，所以还是打算写点东西记录一下。</p>
+<hr />
+<h1 id="minikube">Minikube</h1>
+<p>Minikube是一个本地的Kubernetes开发环境。</p>
+<p>我们知道，如果需要一个K8s的开发环境的话，现在在Docker Desktop里面已经有了打个勾勾就能用的K8s环境了，为啥还需要Minikube呢？</p>
+<p><img src="blog/posts/684/assets/1.png" class="img-fluid" alt="" /></p>
+<p>主要原因大概有两个，</p>
+<p>原因之一是Minikube更加轻量化，直接用Docker Desktop里的这个K8S选项，它太重了，最直观的就是吃内存非常多，让本就不富裕的开发机雪上加霜。而相对而言，Minikube的性能开销就好看了很多，按照官方文档的说法， 它只需要：</p>
+<ul>
+<li>CPU 2内核以上</li>
+<li>2GB 以上内存</li>
+<li>20G空闲磁盘空间</li>
+</ul>
+<p>另一个原因就是，众所周知，咱这儿网络不归地球管，即使非要使用Docker Desktop里的这个K8S，也不是一键点个勾勾就能用的，其中的折腾过程比MiniKube麻烦多了。</p>
+<hr />
+<h2 id="section">准备工作</h2>
+<p>首先，其实Minikube的官方文档写的已经挺直观详细的了：https://minikube.sigs.k8s.io/docs/start/</p>
+<p>要说有啥问题的话，果然还是咱所在地区可能不归地球管，你按照官方文档的做法直接执行一句&quot;minikube start&quot;会读条半天然后告诉你网络错误，这也是为啥中文网络上会有各种旁门左道的方法教你安装明明官网文档已经很详细的东西了。</p>
+<p>那么，说回正题，我们要准备点啥呢，首先是Docker Desktop.</p>
+<p>中文网络上不少文章都是直接把Minikube弄在Hyper-V上的，我个人不太喜欢这么折腾，毕竟但凡你搞云原生开发，电脑上多半都装了个Docker Desktop了，就都用它好了。所以，首先确保有个Docker Desktop然后把它启动起来吧。</p>
+<p>然后，我们需要搞个容器镜像加速器，这儿就用阿里云的好了，就是下面图上的那个，基本上刚开始折腾Docker Desktop的时候大家应该就都有这个了。</p>
+<p><img src="blog/posts/684/assets/2.png" class="img-fluid" alt="" /></p>
+<hr />
+<h2 id="section-1">开始安装</h2>
+<p>首先和官方文档一样，通过choco或者winget安装minikube的cli工具。如果你不知道choco或者winget是啥的话，也别去折腾了，这不重要，官网提供了Windows Installer的安装方式，直接下载后双击运行完了。</p>
+<p><img src="blog/posts/684/assets/3.png" class="img-fluid" alt="" /></p>
+<p>安装完了之后在终端中执行minikube是可以看到一堆输出的。</p>
+<p>基础的命令还是这句：</p>
+<pre><code class="language-bash">minikube start
+</code></pre>
+<p>然后同样，直接执行这句话会告诉你网络错误的，于是我们得在这句命令后面再嘱咐几句：</p>
+<pre><code class="language-bash">--image-mirror-country cn
+</code></pre>
+<p>这句话意思是我们会使用特殊地区的容器镜像仓库来安装Kubernetes，缺省值是<code>registry.cn-hangzhou.aliyuncs.com/google_containers</code>.</p>
+<pre><code class="language-bash">--registry-mirror=xxxxxxxxx
+</code></pre>
+<p>这句话是从docker hub拉去镜像时候的镜像加速器，就是我们之前准备的那个阿里云的镜像加速器地址填进去。</p>
+<p>于是最终这句命令就成了:</p>
+<pre><code class="language-bash">minikube start --image-mirror-country cn --registry-mirror={你的镜像加速器地址}
+</code></pre>
+<p>然后执行这句命令就完事了。</p>
+<p>此外，也可以参考官方文档，添加一些其他参数，比如<code>--cpus=2</code>指定为minikube分配的CPU核数。</p>
+<p>默认情况下，minikube start 命令应该会使用docker来驱动k8s</p>
+<p><img src="blog/posts/684/assets/4.png" class="img-fluid" alt="" /></p>
+<p>如果自动选择的不是这个的话，可以用参数<code>--driver=docker</code>来手动指定。</p>
+<p>完成之后，我们就可以在docker desktop里看到这个东西了：</p>
+<p><img src="blog/posts/684/assets/5.png" class="img-fluid" alt="" /></p>
+<p>之后，我们可以愉快的使用k8s了，</p>
+<p>比如通过<code>minikube dashboard</code>命令打开k8s的控制台，通过<code>minikube stop</code>命令把docker里正在运行的minikube关掉，之类的</p>
