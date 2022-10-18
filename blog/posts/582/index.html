@@ -1,0 +1,60 @@
+﻿<h2 id="why-openupm">Why OpenUPM</h2>
+<p>Unity 2019开始，Unity Package Manager逐渐开始被开发者们用起来了。但还是老问题：Unity几乎没一个功能是拿到手就能用得舒服的。UPM也是如此。</p>
+<p>如果我们要在UPM中安装一个第三方包的话，默认有两种方式：1. 从本地导入 2. 使用Git安装</p>
+<p>从本地导入的安装方式，对多人协作以及DevOps特别不友好，所以一开始我自己的开源Unity项目推荐的安装方式都是使用git安装。</p>
+<p>用是能用，但是有几个比较头疼的地方：</p>
+<p><strong>一个问题是、 使用Git地址安装Package，需要机器上已经具有git，并且可以在命令行里启用。</strong></p>
+<p><img src="blog/posts/582/assets/1.webp" class="img-fluid" alt="" title="命令行里的git" /></p>
+<p>这里的问题是，对美术和策划等工种不友好。</p>
+<p>目前做游戏的行当里，很多公司还是在用SVN来管理项目的，对于不少美术、策划等职业来说，git完全陌生，不会用也不会装。而没有git的话，可能你的项目在他们电脑上就打不开了。</p>
+<p>于是最后的情况多半就是程序挨个跑过去给他们安装，说不嫌麻烦那是假的。除非某个策划或者美术长得特别好看（划掉</p>
+<p><strong>另一个问题是，依赖管理真的烦。</strong></p>
+<p>比如说我项目的这个包吧：</p>
+<p><img src="blog/posts/582/assets/2.webp" class="img-fluid" alt="" /></p>
+<p>这个包存在三个依赖。那安装的时候怎么办呢，你得先分别复制三个依赖的地址，扔进UPM安装，（如果依赖的包有其他的依赖，得一层层套娃去装），等一个个装完之后，再复制本体包的地址，扔给UPM.</p>
+<p>而如果涉及到版本，那就更头疼了。git UPM方式无法在UPM里管理版本，如果要安装指定版本的话，你得在链接后面加上git repo里的release tag或者branch信息。</p>
+<p>如果你的项目里有几个包需要依赖特定版本的话，那无论安装还是升级，都烦的不行。</p>
+<p>那这时候，我们就需要找找看有没有什么神奇的工具来帮助我们解决这些头疼的问题了。于是，找到了文本的主角：OpenUPM</p>
+<hr />
+<h2 id="hello-openupm">Hello, OpenUPM</h2>
+<p>我们先来看看OpenUPM是怎么使用的。</p>
+<p>首先，你的电脑上需要安装好npm. 这里的需要npm比前文说的需要git 好在哪儿呢，它好在只需要你电脑上有就行了。</p>
+<p>你需要添加新的package的话，你装个npm就可以了，项目给到美术策划特效音效什么的时候，他们可以直接打开，不需要再安装什么东西了。</p>
+<p>确保有了npm之后呢，我们来安装OpenUPM的cli工具：</p>
+<pre><code class="language-bash">npm install -g openupm-cli
+</code></pre>
+<p>安装完成之后，我们就可以直接用了。</p>
+<p>以我的开源项目&quot;TinaX.Core&quot;为例，它依赖了两个package</p>
+<p><img src="blog/posts/582/assets/3.webp" class="img-fluid" alt="" /></p>
+<p>在之前使用git UPM的情况下，我们需要手动复制地址安装两个依赖package，再安装自身。然后在有了OpenUPM之后，我们只需要这样：</p>
+<p><img src="blog/posts/582/assets/4.webp" class="img-fluid" alt="" /></p>
+<pre><code class="language-bash">openupm add io.nekonya.tinax.core
+</code></pre>
+<p>一句话，连带依赖和本体直接就添加进工程了。一对比简直太方便了。</p>
+<hr />
+<h2 id="openupm">发布到OpenUPM</h2>
+<p>那么这么方便的小工具，我们怎么把自己的项目也给用上去呢。接下来我们就来试试看。</p>
+<p>首先，我们先来了解一下OpenUPM是怎么回事：</p>
+<p><img src="blog/posts/582/assets/5.webp" class="img-fluid" alt="" /></p>
+<p>根据官网的文档介绍，OpenUPM主要分为四个部分。</p>
+<p>首先是一个repo，包含一个官网，并维护一份packages的列表。这个列表是谁都可以添加的。怎么添加呢，本质上是fork一份这个repo，然后在repo里加上自己packages的信息，然后pr给主repo.</p>
+<p>接下来就是pipeline的工作了，repo收到pull requests之后，会触发pipeline，pipeline会在官网中添加你的packages信息，并且把你的repo中的代码给弄到OpenUPM自己维护的一个npm registry服务器上。</p>
+<p>最后，用户通过openupm cli工具，就是我们之前命令行里用的那个，把你的package给弄到unity里面去。</p>
+<p>这儿要提的是，其实openupm的cli工具是可以切换到别的源的，所以网络不好或者有自己想法的用户，也可以有更多自己的想法。</p>
+<p>那么，我们自己动手试试看，把自己的项目给发布到OpenUPM吧。首先，在官网的顶部找到一个小加号，点进去</p>
+<p><img src="blog/posts/582/assets/6.webp" class="img-fluid" alt="" /></p>
+<p>然后，填写自己要发布的仓库的地址，点击&quot;Go&quot;</p>
+<p><img src="blog/posts/582/assets/7.webp" class="img-fluid" alt="" /></p>
+<p>然后，填写完各种信息，点击最后的小按钮“Verify package”</p>
+<p><img src="blog/posts/582/assets/8.webp" class="img-fluid" alt="" /></p>
+<p>然后进入一个确认信息的页面，检查无误后点击“Upload package”</p>
+<p><img src="blog/posts/582/assets/9.webp" class="img-fluid" alt="" /></p>
+<p>然后就会跳转到Github了，点击页面最下方的绿色按钮“Propose new file” (PS:首次使用会提示你fork这个仓库。)</p>
+<p><img src="blog/posts/582/assets/10.webp" class="img-fluid" alt="" /></p>
+<p>然后创建PR</p>
+<p><img src="blog/posts/582/assets/11.webp" class="img-fluid" alt="" /></p>
+<p>此时会触发pipeline，等pipeline把一切都处理好之后, 我们就可以在主仓库里看到我们的package了。</p>
+<p><img src="blog/posts/582/assets/12.webp" class="img-fluid" alt="" /></p>
+<p>而后续当你的仓库有更新时，OpenUPM维护的npm服务器里也会被pipeline自动更新的（实测有延迟）</p>
+<p><img src="blog/posts/582/assets/13.png" class="img-fluid" alt="" /></p>
+<p>可以被使用了</p>

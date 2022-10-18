@@ -1,0 +1,87 @@
+﻿<blockquote class="blockquote">
+<p>御三家游戏引擎的UI系统，没有一个不拉垮的。 ——鲁迅</p>
+</blockquote>
+<p>其实讲真，Unity UI（UGUI）算是游戏引擎界比较不错的一套UI系统了。可是由于某些众所周不知的原因，UGUI已经进入只维护，不会再有大变化的状态了，取而代之的就是UI Toolkit（原来叫UI Element）的这个东西。</p>
+<p>技术如逆水行舟，不进则退，我们也随着Unity Tech的脚步，来预习一下这个可能要接替UGUI的下一代UI系统吧。</p>
+<h2 id="section">准备工作</h2>
+<p>我们先创建一个空工程：</p>
+<p><img src="blog/posts/201/assets/1.png" class="img-fluid" alt="" /></p>
+<p>目前UI Toolkit正在处于预览状态，所以我们顺便打开项目设置里的这个选项：</p>
+<p><img src="blog/posts/201/assets/2.webp" class="img-fluid" alt="" /></p>
+<p>然后进入包管理面板，安装好一个叫“UI Builder”的包</p>
+<p><img src="blog/posts/201/assets/3.jpg" class="img-fluid" alt="" /></p>
+<p>这是一个UI Toolkit的UI文件可视化编辑工具。</p>
+<p>但还没完，我们还得安装UI Toolkit的Runtime包，这个包目前在包管理面板里是看不到的，我们得手动添加一下。点击包管理界面左上角的加号，选择“add package from git url”,然后输入地址：</p>
+<pre><code>com.unity.ui
+</code></pre>
+<p>稍等读条，之后我们就可以使用UI ToolKit了。</p>
+<hr />
+<h2 id="ui">第一个UI</h2>
+<p>我们先试着用UI Toolkit在Runtime下显示点东西吧。</p>
+<p>首先，创建一个空的GameObject，</p>
+<p><img src="blog/posts/201/assets/4.webp" class="img-fluid" alt="" /></p>
+<p>然后添加一个叫“UI Document”的组件，然后这个GameObject就变成了一个UI Toolkit的UI呐。</p>
+<p><img src="blog/posts/201/assets/5.webp" class="img-fluid" alt="" /></p>
+<p>然后和UGUI一样，如果我们想要和UI的元素们发生一点关系的话，还得添加一个Event System组件，不过要注意，这个组件在UI Toolkit里面是特制的，和以前用的EventSystem不是同一个东西</p>
+<p><img src="blog/posts/201/assets/6.webp" class="img-fluid" alt="" /></p>
+<p>然后我们在资源面板右键创建一个“Panel Settings Asset”</p>
+<p><img src="blog/posts/201/assets/7.webp" class="img-fluid" alt="" /></p>
+<p>这个资源包含了一些UI显示的设置，如果以前用过UGUI的话，这里的设置项大抵看着还是有点眼熟的。</p>
+<p>然后把我们创建的这个资产文件拖到UI Document的相关位置</p>
+<p><img src="blog/posts/201/assets/8.webp" class="img-fluid" alt="" /></p>
+<p>接下来还空着一个位置，这个地方就是我们的UI Toolkit的UI文件本体了，通过右键菜单“Create → UI Toolkit → UI Document”创建这个文件：</p>
+<p><img src="blog/posts/201/assets/9.webp" class="img-fluid" alt="" /></p>
+<p>双击打开，这时候我们看到的就是“UI Builder”的界面：</p>
+<p><img src="blog/posts/201/assets/10.webp" class="img-fluid" alt="" /></p>
+<p>怎么说呢，有几分像非游戏领域的传统程序开发的UI编辑器了</p>
+<p><img src="blog/posts/201/assets/11.webp" class="img-fluid" alt="" title="上一代人心中的经典：VB" /></p>
+<p>总的来说还是比较好理解的，属于一眼看上去就知道应该怎么用，怎么操作的那种。</p>
+<p>那么，我们在UI里显示一句Hello World试试看，</p>
+<p><img src="blog/posts/201/assets/12.webp" class="img-fluid" alt="" /></p>
+<p>拖拽完了之后，我们可以看到如下：</p>
+<p><img src="blog/posts/201/assets/13.webp" class="img-fluid" alt="" /></p>
+<p>在选中“Label”的情况下，在右边的“Inspector”窗口中把“Text”属性改成“Hello World”，这个值代表我们具体要显示的文本。</p>
+<p><img src="blog/posts/201/assets/14.webp" class="img-fluid" alt="" /></p>
+<p>（Label就类似于我们之前在UGUI上的那个Text组件）</p>
+<p>然后在同样Inspector窗口下面的“Text”选择夹中，修改Size值把字体调大，再修改Align值让文本垂直居中。（到这一步为止的操作其实都很像UGUI的Text，不怎么难理解）</p>
+<p><img src="blog/posts/201/assets/15.webp" class="img-fluid" alt="" /></p>
+<p>最后别忘记Ctrl+S保存文件，并把这个文件拖到我们一开始创建的GameObject的UIDocument-&gt;Source Asset的位置。</p>
+<p><img src="blog/posts/201/assets/16.webp" class="img-fluid" alt="" /></p>
+<p>运行查看效果，成功显示：</p>
+<p><img src="blog/posts/201/assets/17.webp" class="img-fluid" alt="" /></p>
+<p>看到这儿，接下来大家肯定就有一个新的疑问：我要怎么把这个文字显示到屏幕中间去呢（水平居中）</p>
+<p>其实这儿还真没以前UGUI那么方便，直接锚点一拖完事，在UI Toolkit中，它像其他非游戏领域的传统编程UI一样涉及到一个（相对）庞大的知识点：布局。但是这事我们往后放放再说，我们先以程序员的视角来细看刚刚的布局文件。</p>
+<hr />
+<h2 id="uxml">UXML</h2>
+<p>直接用文本编辑器打开我们刚刚编辑的UI文件的话，我们会看到这些内容：</p>
+<p><img src="blog/posts/201/assets/18.webp" class="img-fluid" alt="" /></p>
+<p>稍微整理一下：</p>
+<p><img src="blog/posts/201/assets/19.webp" class="img-fluid" alt="" /></p>
+<pre><code class="language-xml">&lt;ui:UXML 
+    xmlns:ui=&quot;UnityEngine.UIElements&quot; 
+    xmlns:uie=&quot;UnityEditor.UIElements&quot; 
+    xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+    engine=&quot;UnityEngine.UIElements&quot; 
+    editor=&quot;UnityEditor.UIElements&quot; 
+    noNamespaceSchemaLocation=&quot;../../UIElementsSchema/UIElements.xsd&quot; 
+    editor-extension-mode=&quot;False&quot;&gt;
+    
+    &lt;ui:Label text=&quot;Hello World&quot; 
+        display-tooltip-when-elided=&quot;True&quot; 
+        style=&quot;font-size: 38px; color: rgba(255, 255, 255, 255); -unity-text-align: upper-center;&quot; /&gt;
+&lt;/ui:UXML&gt;
+</code></pre>
+<p>有做过.NET开发的同学，估计看着就会觉得眼熟：“这好像是个XAML啊”，</p>
+<p>其实确实，我们可以粗略的理解为：UI Toolkit的UI文件就是一个把Style砍掉把CSS加进来的“取其糟粕去其精华”的魔改版XAML.</p>
+<p><img src="blog/posts/201/assets/20.webp" class="img-fluid" alt="" title="USS: Unity版CSS" /></p>
+<p>然后就顺便说说我们上面提到的问题：它是怎么布局的呢？这儿它就不像XAML了，反倒是前端的小伙伴们会对它非常熟悉：Flexbox.</p>
+<hr />
+<h2 id="section-1">如何学习</h2>
+<p>大致了解了这个UI Toolkit之后，我们顺便谈谈，如果我们是一个从零开始并且只接触过Unity的程序的话，应该怎么学习它呢。</p>
+<p>很遗憾就是，UI Toolkit目前相关资料极少，中文资料更是荒芜，所以我更推荐“曲线救国”一下。</p>
+<p>首先先了解下XAML的基础知识，</p>
+<p><img src="blog/posts/201/assets/21.webp" class="img-fluid" alt="" /></p>
+<p>比如上面代码里的&quot;xmlns:xxxx&quot;到底是个什么意思，之类的，随便挑一个WPF、UWP、Xamarin的入门资料看看，只了解其中XAML的部分就够了。</p>
+<p>然后再了解一下HTML，这个更是只要了解个大概就行，比如<code>&lt;Style src=&quot;MyUI.uss&quot; /&gt;</code>这句话是个什么意思。毕竟它的语义和标准的HTML还是有挺大出入的，了解多了也没用。</p>
+<p>最后就是CSS了，这个真得里里外外好好学一下，UI Toolkit的样式主要就是靠CSS的。</p>
+<p>最后祝大家玩的开心.</p>

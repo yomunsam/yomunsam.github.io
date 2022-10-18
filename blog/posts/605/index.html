@@ -1,0 +1,42 @@
+﻿<p>在Unity中制作UI时，我们通常习惯于单独使用一个Camera来拍摄UI内容。</p>
+<p>这是主场景相机：</p>
+<p><img src="blog/posts/605/assets/1.webp" class="img-fluid" alt="主场景相机" title="主场景相机" /></p>
+<p>这是UI相机：</p>
+<p><img src="blog/posts/605/assets/2.png" class="img-fluid" alt="" title="UI相机" /></p>
+<p>这是两者叠加的最终画面：</p>
+<p><img src="blog/posts/605/assets/3.webp" class="img-fluid" alt="" title="最终画面" /></p>
+<p>这种制作方式有不少优点，比如避免了主场景相机的后处理效果可能会干涉UI内容等问题。</p>
+<p>然而在Unity新出的URP（通用渲染管线）中，这一制作方法却有点问题。在相当长的一段时间内，LWRP/URP是无法像以前的内置渲染管线一样叠加Camera的。而后来，总算是可以了，但是操作方法与之前有所不同，故写文记录一下。</p>
+<hr />
+<p>在URP中，Camera组件变成这样了</p>
+<p><img src="blog/posts/605/assets/4.webp" class="img-fluid" alt="" title="Camera组件" /></p>
+<p>当我们直接把UICamera弄出来之后，我们会发现它的效果不符合预期。</p>
+<p><img src="blog/posts/605/assets/5.webp" class="img-fluid" alt="" /></p>
+<p>这时候，我们需要手动多做几步：</p>
+<p>首先，把UICamera的RenderType改成“<code>Overlay</code>”</p>
+<p><img src="blog/posts/605/assets/6.webp" class="img-fluid" alt="" /></p>
+<p>然后，把它添加到场景主相机的Stack中，</p>
+<p><img src="blog/posts/605/assets/7.webp" class="img-fluid" alt="" /></p>
+<p>这样一来，我们就得到了符合预期的画面效果</p>
+<p><img src="blog/posts/605/assets/8.webp" class="img-fluid" alt="" /></p>
+<hr />
+<h2 id="section">更进一步</h2>
+<p>把UI相机手动添加到场景相机这个做法，足以应对大部分需求了。但是总觉得有点不舒服</p>
+<p><img src="blog/posts/605/assets/9.webp" class="img-fluid" alt="" /></p>
+<p>于是去和小伙伴们讨论了一下，大概有两个思路：</p>
+<p>思路一：全局只用一个Main Camera，由cinemachine来管理</p>
+<p>思路二：没有什么事情是往上再摞一层不能解决的</p>
+<p>首先我们搞个空的Camera，什么都不干，作为全局唯一的一个RenderType为Base的Camera，从游戏初始化的时候就直接<code>DontDestroyOnLoad</code> ,</p>
+<p>然后UICamera和每个场景要用到的各种Camera都给放在这个Camera的Stack里面来。</p>
+<p><img src="blog/posts/605/assets/10.webp" class="img-fluid" alt="" /></p>
+<hr />
+<h2 id="section-1">那么，从代码里控制</h2>
+<p>实际上，即使在URP中，Camera还是那个Camera，<code>UnityEngine.Camera</code>那个Camera. 什么stack啊、renderType啊都是没有的。</p>
+<p>它们都在这里：</p>
+<p><img src="blog/posts/605/assets/11.webp" class="img-fluid" alt="" /></p>
+<p>在URP中，没有Camera上都会附带一个这样的组件，位于命名空间<code>UnityEngine.Rendering.Universal</code></p>
+<p><img src="blog/posts/605/assets/12.png" class="img-fluid" alt="" /></p>
+<p>我们也可以对<code>Camera</code>组件使用扩展方法<code>GetUniversalAdditionalCameraData</code>来获得到它</p>
+<p><img src="blog/posts/605/assets/13.png" class="img-fluid" alt="" /></p>
+<p>而那个Stack，就是它里面的一个List&lt;&gt;</p>
+<p><img src="blog/posts/605/assets/14.png" class="img-fluid" alt="" /></p>
