@@ -18,6 +18,12 @@
     object-fit: cover;
     object-position: 50% 26%;
 }
+
+/*@media (max-width: 768px) {
+    .main-cover {
+        height: 24rem;
+    }
+}*/
 /* /Pages/Post/Index.razor.rz.scp.css */
 .post-card[b-k8nry1m3ny] {
     border-radius: .45rem;
@@ -43,6 +49,14 @@
     border-top-left-radius: .45rem;
     border-top-right-radius: .45rem;
 }
+
+@media (max-width: 768px) {
+    .cover-img[b-k8nry1m3ny] {
+        object-position: 50% 28%;
+        height: 28rem;
+    }
+}
+
 
 .post-title[b-k8nry1m3ny] {
     text-align: center;

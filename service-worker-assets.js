@@ -9,7 +9,7 @@
       "url": "_framework\/dotnet.timezones.blat"
     },
     {
-      "hash": "sha256-KY28XvkzHHw39pTrgzEWE6Uds744HY\/cIMBH\/r0AY60=",
+      "hash": "sha256-kvXhGceZZ+QyeTo6WlntrhGn6f+ZMdBtvpBkgFQo1j0=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -177,7 +177,7 @@
       "url": "_framework\/Takina.Infrastructure.WebAssembly.dll"
     },
     {
-      "hash": "sha256-pLFsNY\/MPj40oRmecOwuskpOZXhGClYYPnpBtjoh09U=",
+      "hash": "sha256-5AGjwB7GlcfKuVkufVCZ3HoYob3Dl\/3LAmkjks7Cffk=",
       "url": "_framework\/Takina.WebPage.dll"
     },
     {
@@ -197,7 +197,7 @@
       "url": "appsettings.Production.json"
     },
     {
-      "hash": "sha256-T\/4li4jb5Hujsi5jQihoVC0UAiVOnQWXnmtrsXtBW\/Y=",
+      "hash": "sha256-Orss575WsQoCLAduYZTBr6zKNy4a0L9kCBAfkK8GRPw=",
       "url": "Takina.WebPage.styles.css"
     },
     {
@@ -1009,5 +1009,5 @@
       "url": "manifest.json"
     }
   ],
-  "version": "HFRevMXz"
+  "version": "WtJlWGAy"
 };
