@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="zh-hans" data-bs-color-scheme>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!--Blazor:{"type":"webassembly","assembly":"Microsoft.AspNetCore.Components.Web","typeName":"Microsoft.AspNetCore.Components.Web.HeadOutlet","parameterDefinitions":"W10=","parameterValues":"W10=","prerenderId":"5a58bdb8878e4e64bb6c7680ad7747ca"}--><!--Blazor:{"prerenderId":"5a58bdb8878e4e64bb6c7680ad7747ca"}-->
+    <meta name="color-scheme" content="light dark" />
+    <base href="/" />
+    <!--<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap-blackbox.min.css" />
+    <link rel="stylesheet" href="lib/bootstrap-icon/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/bootstrap-dark-override.min.css" />
+
+    <link rel="stylesheet" href="lib/prismjs/theme/prism-vsc-dark-plus.css" />
+    <link rel="stylesheet" href="lib/prismjs/plugins/line-numbers/prism-line-numbers.min.css" />
+
+    <link href="css/app.min.css" rel="stylesheet" />
+    <link href="Takina.WebPage.styles.css" rel="stylesheet" />
+    <!--<link href="manifest.json" rel="manifest" />-->
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+
+    <!-- Start Single Page Apps for GitHub Pages -->
+    <script type="text/javascript">
+        // Single Page Apps for GitHub Pages
+        // https://github.com/rafrex/spa-github-pages
+        // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+        // ----------------------------------------------------------------------
+        // This script checks to see if a redirect is present in the query string
+        // and converts it back into the correct url and adds it to the
+        // browser's history using window.history.replaceState(...),
+        // which won't cause the browser to attempt to load the new url.
+        // When the single page app is loaded further down in this file,
+        // the correct url will be waiting in the browser's history for
+        // the single page app to route accordingly.
+        (function (l) {
+            if (l.search) {
+                var q = {};
+                l.search.slice(1).split('&').forEach(function (v) {
+                    var a = v.split('=');
+                    q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+                });
+                if (q.p !== undefined) {
+                    window.history.replaceState(null, null,
+                        l.pathname.slice(0, -1) + (q.p || '') +
+                        (q.q ? ('?' + q.q) : '') +
+                        l.hash
+                    );
+                }
+            }
+        }(window.location))
+    </script>
+    <!-- End Single Page Apps for GitHub Pages -->
+</head>
+
+<body>
+
+    <!--Blazor:{"type":"webassembly","assembly":"Takina.WebPage","typeName":"Takina.WebPage.App","parameterDefinitions":"W10=","parameterValues":"W10=","prerenderId":"53f2268e6d694c1d8fa1b08454e69f91"}--><header b-cvyqi03zr4><nav class="navbar navbar-dark navbar-bg navbar-expand-sm navbar-toggleable-sm box-shadow mb-3 fixed-top" b-cvyqi03zr4><div class="container" b-cvyqi03zr4><a class="navbar-brand" href="/" b-cvyqi03zr4>Hello&#x535A;&#x5BA2;</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" b-cvyqi03zr4><span class="navbar-toggler-icon" b-cvyqi03zr4></span></button>
+            
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" b-cvyqi03zr4><ul class="navbar-nav nav-pills gap-2 app-nav-pills" b-cvyqi03zr4><li class="nav-item" b-cvyqi03zr4><a href="" class="nav-link px-3 px-sm-2">首页</a></li>
+
+                    <li class="nav-item" b-cvyqi03zr4><a href="#" class="nav-link px-3 px-sm-2">关于</a></li></ul>
+
+                <ul class="navbar-nav ms-1" b-cvyqi03zr4><li class="nav-item" b-cvyqi03zr4><button class="btn btn-sm py-0" onclick="darkmode.toggleDarkMode()" b-cvyqi03zr4><i class="bi bi-sun-fill" id="btn-switch-light" style="font-size:1.01rem;" title="light mode" b-cvyqi03zr4></i>
+                            <i class="bi bi-moon-stars-fill text-white pb-0 mt-1" id="btn-switch-dark" title="dark mode" b-cvyqi03zr4></i></button></li></ul></div></div></nav></header>
+
+<div class="page" b-mfcob2m21r><main b-mfcob2m21r><div class="container" b-k8nry1m3ny><div class="row mt-5 mb-4" b-k8nry1m3ny><div class="col-md-9" b-k8nry1m3ny><div class="card mb-3 post-card shadow" b-k8nry1m3ny><div class="cover-div" b-k8nry1m3ny><img src="img/banner/7.jpg" class="img-fluid cover-img" b-k8nry1m3ny /></div><div class="card-body" b-k8nry1m3ny><div class="mb-4" b-k8nry1m3ny><h1 class="post-title" b-k8nry1m3ny>Hello World Blog</h1><p class="text-center text-muted mb-1" b-k8nry1m3ny><div class="d-inline me-3" b-k8nry1m3ny><img class="author-head-img" src="/img/head.jpg" b-k8nry1m3ny>
+                                            yomunsam</div><small class title="2022-10-4 09:51:3" b-k8nry1m3ny><i class="bi bi-calculator-fill" b-k8nry1m3ny></i>
+                                        2022-10-4  09:51:3</small></p></div><div class="post-content" b-k8nry1m3ny><h1 id="hello-world-blog"></h1>
+<p>This is my blog post. I hope you like it!</p>
+<p><strong>以下内容使用Github Copilot编写</strong></p>
+<h1 id="section">一级标题</h1>
+<p>正文</p>
+<h2 id="h2">H2 标题</h2>
+<h3 id="h3">H3 标题</h3>
+<h4 id="h4">H4 标题</h4>
+<h5 id="h5">H5 标题</h5>
+<p>正常文字 <strong>粗体文字</strong> <em>斜体文字</em></p>
+<br>
+<hr />
+<h2 id="section-1">代码块</h2>
+<p>行内代码: <code>var hello = 1;</code></p>
+<p>代码块：</p>
+<pre><code class="language-csharp">using System;
+
+Console.WriteLine(&quot;Hello World!&quot;);
+</code></pre>
+<br>
+<hr />
+<h2 id="section-2">表格</h2>
+<table class="table">
+<thead>
+<tr>
+<th style="text-align: left;">表头1</th>
+<th style="text-align: center;">表头2</th>
+<th style="text-align: right;">表头3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Key1</td>
+<td style="text-align: center;"><code>Value1</code></td>
+<td style="text-align: right;">Comment1</td>
+</tr>
+<tr>
+<td style="text-align: left;">Key2</td>
+<td style="text-align: center;"><code>Value2</code></td>
+<td style="text-align: right;">Comment2</td>
+</tr>
+<tr>
+<td style="text-align: left;">Key3</td>
+<td style="text-align: center;"><code>Value3</code></td>
+<td style="text-align: right;">Comment3</td>
+</tr>
+</tbody>
+</table>
+<br>
+<hr />
+<h2 id="section-3">列表</h2>
+<h3 id="section-4">无序列表</h3>
+<ul>
+<li>无序列表1</li>
+<li>无序列表2</li>
+<li>无序列表3</li>
+</ul>
+<h3 id="section-5">有序列表</h3>
+<ol>
+<li>有序列表1</li>
+<li>有序列表2</li>
+<li>有序列表3</li>
+</ol>
+<h3 id="section-6">任务列表</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" checked="checked" /> 任务1</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> 任务2</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> 任务3</li>
+</ul>
+<br>
+<hr />
+<h2 id="section-7">图片</h2>
+<p><img src="blog/posts/2/assets/1.png" class="img-fluid" alt="" /></p>
+<br>
+<hr />
+<h2 id="section-8">链接</h2>
+<p><a href="https://yomunchan.moe">博客首页</a></p>
+<br>
+<hr />
+<h2 id="section-9">引用</h2>
+<blockquote class="blockquote">
+<p>引用内容</p>
+</blockquote>
+<br>
+<hr />
+<h2 id="emoji">Emoji</h2>
+<p>😄 👍 ✨ 🐫 🎉 🚀 🤘 😮ctocat:</p>
+<hr />
+<h2 id="section-10">媒体插入</h2>
+<p><iframe src="https://www.youtube.com/embed/mswPy5bt3TQ" class="img-fluid youtube" width="500" height="281" frameborder="0" allowfullscreen=""></iframe></p>
+</div></div></div></div>
+
+            <div class="col-md-3" b-k8nry1m3ny><div class="card" b-k8nry1m3ny><div class="card-body" b-k8nry1m3ny>
+                        todo
+                    </div></div></div></div>
+        
+        <footer><hr class="py-0 mt-4 mb-2">
+    <p class="fw-bold mb-0" style="font-size:.9rem;"> &copy; 2017-2022 </p> 
+    <p class="text-muted" style="font-size:.8rem;">喵</p></footer></div></main></div>
+        <!--Blazor:{"prerenderId":"53f2268e6d694c1d8fa1b08454e69f91"}-->
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+
+    <script src="lib/prismjs/prism.js" data-manual></script>
+    <script src="lib/prismjs/components/prism-bash.min.js" async></script>
+    <script src="lib/prismjs/components/prism-csharp.min.js"></script>
+    <script src="lib/prismjs/components/prism-lua.min.js" async></script>
+    <script src="lib/prismjs/components/prism-json.min.js" async></script>
+    <script src="lib/prismjs/components/prism-cshtml.min.js" async></script>
+    <script src="lib/prismjs/components/prism-powershell.min.js" async></script>
+    <script src="lib/prismjs/components/prism-shell-session.min.js" async></script>
+    <script src="lib/prismjs/plugins/line-numbers/prism-line-numbers.min.js" async></script>
+
+    <script src="js/darkmode.min.js"></script>
+
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+
+    <script type="module">
+        import { BrotliDecode } from './decode.min.js';
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (type !== 'dotnetjs' && location.hostname !== 'localhost') {
+                    return (async function () {
+                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        const originalResponseBuffer = await response.arrayBuffer();
+                        const originalResponseArray = new Int8Array(originalResponseBuffer);
+                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
+                        const contentType = type ===
+                            'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+                        return new Response(decompressedResponseArray,
+                            { headers: { 'content-type': contentType } });
+                    })();
+                }
+            }
+        });
+    </script>
+
+    <!--Blazor-Component-State:e30=-->
+
+<!-- Visual Studio Browser Link -->
+<script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestId="8872309a65e94e7886b195bad7c2ab94"data-requestMappingFromServer="false" data-connectUrl="http://localhost:42125/a7aa84d64b9f4cd5aee833009e55e722/browserLink"></script>
+<!-- End Browser Link -->
+
+<script src="/_framework/aspnetcore-browser-refresh.js"></script></body>
+
+</html>

@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="zh-hans" data-bs-color-scheme>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!--Blazor:{"type":"webassembly","assembly":"Microsoft.AspNetCore.Components.Web","typeName":"Microsoft.AspNetCore.Components.Web.HeadOutlet","parameterDefinitions":"W10=","parameterValues":"W10=","prerenderId":"e5dbab902419427a94bcf4bd0ae6218a"}--><!--Blazor:{"prerenderId":"e5dbab902419427a94bcf4bd0ae6218a"}-->
+    <meta name="color-scheme" content="light dark" />
+    <base href="/" />
+    <!--<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap-blackbox.min.css" />
+    <link rel="stylesheet" href="lib/bootstrap-icon/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/bootstrap-dark-override.min.css" />
+
+    <link rel="stylesheet" href="lib/prismjs/theme/prism-vsc-dark-plus.css" />
+    <link rel="stylesheet" href="lib/prismjs/plugins/line-numbers/prism-line-numbers.min.css" />
+
+    <link href="css/app.min.css" rel="stylesheet" />
+    <link href="Takina.WebPage.styles.css" rel="stylesheet" />
+    <!--<link href="manifest.json" rel="manifest" />-->
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+
+    <!-- Start Single Page Apps for GitHub Pages -->
+    <script type="text/javascript">
+        // Single Page Apps for GitHub Pages
+        // https://github.com/rafrex/spa-github-pages
+        // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+        // ----------------------------------------------------------------------
+        // This script checks to see if a redirect is present in the query string
+        // and converts it back into the correct url and adds it to the
+        // browser's history using window.history.replaceState(...),
+        // which won't cause the browser to attempt to load the new url.
+        // When the single page app is loaded further down in this file,
+        // the correct url will be waiting in the browser's history for
+        // the single page app to route accordingly.
+        (function (l) {
+            if (l.search) {
+                var q = {};
+                l.search.slice(1).split('&').forEach(function (v) {
+                    var a = v.split('=');
+                    q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+                });
+                if (q.p !== undefined) {
+                    window.history.replaceState(null, null,
+                        l.pathname.slice(0, -1) + (q.p || '') +
+                        (q.q ? ('?' + q.q) : '') +
+                        l.hash
+                    );
+                }
+            }
+        }(window.location))
+    </script>
+    <!-- End Single Page Apps for GitHub Pages -->
+</head>
+
+<body>
+
+    <!--Blazor:{"type":"webassembly","assembly":"Takina.WebPage","typeName":"Takina.WebPage.App","parameterDefinitions":"W10=","parameterValues":"W10=","prerenderId":"eff5fed5e6404dba9d9137f0c40c4bbb"}--><header b-cvyqi03zr4><nav class="navbar navbar-dark navbar-bg navbar-expand-sm navbar-toggleable-sm box-shadow mb-3 fixed-top" b-cvyqi03zr4><div class="container" b-cvyqi03zr4><a class="navbar-brand" href="/" b-cvyqi03zr4>Hello&#x535A;&#x5BA2;</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" b-cvyqi03zr4><span class="navbar-toggler-icon" b-cvyqi03zr4></span></button>
+            
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" b-cvyqi03zr4><ul class="navbar-nav nav-pills gap-2 app-nav-pills" b-cvyqi03zr4><li class="nav-item" b-cvyqi03zr4><a href="" class="nav-link px-3 px-sm-2">首页</a></li>
+
+                    <li class="nav-item" b-cvyqi03zr4><a href="#" class="nav-link px-3 px-sm-2">关于</a></li></ul>
+
+                <ul class="navbar-nav ms-1" b-cvyqi03zr4><li class="nav-item" b-cvyqi03zr4><button class="btn btn-sm py-0" onclick="darkmode.toggleDarkMode()" b-cvyqi03zr4><i class="bi bi-sun-fill" id="btn-switch-light" style="font-size:1.01rem;" title="light mode" b-cvyqi03zr4></i>
+                            <i class="bi bi-moon-stars-fill text-white pb-0 mt-1" id="btn-switch-dark" title="dark mode" b-cvyqi03zr4></i></button></li></ul></div></div></nav></header>
+
+<div class="page" b-mfcob2m21r><main b-mfcob2m21r><p>你看到的是一个预渲染的页面</p></main></div>
+        <!--Blazor:{"prerenderId":"eff5fed5e6404dba9d9137f0c40c4bbb"}-->
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+
+    <script src="lib/prismjs/prism.js" data-manual></script>
+    <script src="lib/prismjs/components/prism-bash.min.js" async></script>
+    <script src="lib/prismjs/components/prism-csharp.min.js"></script>
+    <script src="lib/prismjs/components/prism-lua.min.js" async></script>
+    <script src="lib/prismjs/components/prism-json.min.js" async></script>
+    <script src="lib/prismjs/components/prism-cshtml.min.js" async></script>
+    <script src="lib/prismjs/components/prism-powershell.min.js" async></script>
+    <script src="lib/prismjs/components/prism-shell-session.min.js" async></script>
+    <script src="lib/prismjs/plugins/line-numbers/prism-line-numbers.min.js" async></script>
+
+    <script src="js/darkmode.min.js"></script>
+
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <!--<script>navigator.serviceWorker.register('service-worker.js');</script>-->
+
+    <script type="module">
+        import { BrotliDecode } from './decode.min.js';
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (type !== 'dotnetjs' && location.hostname !== 'localhost') {
+                    return (async function () {
+                        const response = await fetch(defaultUri + '.br', { cache: 'no-cache' });
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        const originalResponseBuffer = await response.arrayBuffer();
+                        const originalResponseArray = new Int8Array(originalResponseBuffer);
+                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
+                        const contentType = type ===
+                            'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
+                        return new Response(decompressedResponseArray,
+                            { headers: { 'content-type': contentType } });
+                    })();
+                }
+            }
+        });
+    </script>
+
+    <!--Blazor-Component-State:eyJQcmVSZW5kZXJpbmdJbmZvIjoiZXlKcGMxQnlaVkpsYm1SbGNtbHVaeUk2TVgwPSJ9-->
+
+<!-- Visual Studio Browser Link -->
+<script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestId="89a4c92a6ba94ccd84eaf99e8f5265a7"data-requestMappingFromServer="false" data-connectUrl="http://localhost:42125/a7aa84d64b9f4cd5aee833009e55e722/browserLink"></script>
+<!-- End Browser Link -->
+
+<script src="/_framework/aspnetcore-browser-refresh.js"></script></body>
+
+</html>
