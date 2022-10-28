@@ -1,0 +1,42 @@
+﻿<h1 id="unity-enginescriptablesingleton"></h1>
+<p><code>ScriptableSingleton</code> 是我最近不小心发现的一个类，它位于UnityEditor namespace，但是并没有出现在官方的文档上。</p>
+<p>于是，好奇心来了。经过一系列的琢磨和查阅资料，发现它可能是用于编辑器内部记录数据的一个功能（能不能保存数据还不知道）</p>
+<br>
+<hr />
+<p>比方说，我们有两个编辑器窗口，同时需要一个数据，那我们可以把它直接记录在一个变量或者property上。</p>
+<pre><code class="language-csharp">namespace Nekonya.Example
+{
+    public static class Demo
+    {
+        public static bool User_Is_A_Cat { get; set; }
+    }
+}
+</code></pre>
+<p>然后你可以在需要它的地方这么调用它：<code>var b_cat = Demo.User_Is_A_Cat;</code></p>
+<p>但是这时候就有个问题：这些数据很容易丢失。</p>
+<p>比如说你改了同项目中的某个其他的代码，触发了Unity的代码重编译，然后你存放在这里的数据就没了。</p>
+<br>
+<hr />
+<p>那这种时候，就可以用<code>ScriptableSingleton</code> 这个小功能来记录数据了。</p>
+<p>我们写一个这样的类：</p>
+<pre><code class="language-csharp">namespace Nekonya.Example
+{
+    public class UserInfo : UnityEditor.ScriptableSingleton&lt;UserInfo&gt;
+    {
+        public bool User_Is_A_Cat { get; set; }
+    }
+}
+</code></pre>
+<p>然后，如果我们要使用它的值的话，就直接访问ScriptableSingleton里面的instance就可以了。</p>
+<pre><code class="language-csharp">namespace Nekonya.Example
+{
+    public class TryGetData
+    {
+        void Meow()
+        {
+            var b_cat = ScriptableSingleton&lt;UserInfo&gt;.instance.User_Is_A手动配置Unity/Android开发环境（Windows）_Cat;
+        }
+    }
+}
+</code></pre>
+<p>这样一来，编辑器下的数据就不会丢失了。</p>

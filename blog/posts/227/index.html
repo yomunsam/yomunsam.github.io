@@ -1,0 +1,64 @@
+﻿<p>开篇吐槽：Goland太贵了！所以我要用VSCode!</p>
+<p>首先，当然是先安装Golang了呀，然而由于Golang是Google的产品，在国内是无法直接访问Golang的官网的（<a href="https://golang.org">https://golang.org</a>）。但是还有个Google在国内特地弄的一个镜像官网可以用：<a href="https://golang.google.cn/">https://golang.google.cn/</a></p>
+<p><img src="blog/posts/227/assets/1.png" class="img-fluid" alt="" /></p>
+<p>早就想买个电脑跑Linux的，但一直没舍得，所以我就只能选Windows版本了嘛</p>
+<p>安装过程就不赘述了，标准的Windows安装包嘛，安装好了之后，就开始配置工作环境吧。</p>
+<br>
+<hr />
+<p>第一步，找个喜欢的位置，建立好工作目录</p>
+<p><img src="blog/posts/227/assets/2.png" class="img-fluid" alt="" title="比如这样" /></p>
+<p>在工作目录下新建一个文件夹<code>bin</code>，就像这样</p>
+<p><img src="blog/posts/227/assets/3.png" class="img-fluid" alt="" /></p>
+<p>目录大概就建好了，现在我们把目录相关的东西添加进环境变量。</p>
+<p>右键“此电脑” → “属性” → “高级系统设置” → “环境变量”</p>
+<p><img src="blog/posts/227/assets/4.png" class="img-fluid" alt="" /></p>
+<p>就像这样喵</p>
+<p><img src="blog/posts/227/assets/5.png" class="img-fluid" alt="" /></p>
+<p>个人喜欢，把配置放在用户变量里，当然，放用户变量里还是系统变量都行</p>
+<p>首先，在Path项中加一条路径，也就是我们刚刚建立的工作空间里的<code>bin</code>目录</p>
+<p>因为Golang环境下有些工具会被编译到这个目录下，添加到PATH环境变量之后我们就可以在命令行里使用这些东西了。</p>
+<p><img src="blog/posts/227/assets/6.png" class="img-fluid" alt="" /></p>
+<p>然后，如果之前安装Go的安装包的那一步很顺利的话，我们可以在用户变量中看到它自动添加了这一条：</p>
+<p><img src="blog/posts/227/assets/7.png" class="img-fluid" alt="" /></p>
+<p>GOPATH应该指向我们的代码工作空间</p>
+<p>我们把这个路径改到我们一开始创建好的工作空间中。</p>
+<p><img src="blog/posts/227/assets/8.png" class="img-fluid" alt="" /></p>
+<p>就像这样</p>
+<p>然后我们新建一个叫<code>GOBIN</code>的变量，同样指向我们工作空间目录下的bin目录</p>
+<p><img src="blog/posts/227/assets/9.png" class="img-fluid" alt="" /></p>
+<p>我们刚刚安装的时候，安装包自动给我们创建了一个叫GOROOT的环境变量，这里指向的是Golang的安装路径，通常不用管它就好</p>
+<p><img src="blog/posts/227/assets/10.png" class="img-fluid" alt="" /></p>
+<p>最后，重启一下电脑，让相关的配置生效</p>
+<br>
+<hr />
+<p>然后，就开始折腾VSCode的部分了。</p>
+<p>首先，用vscode打开我们的工作目录。</p>
+<p>第一件事，先装上微软家开发的这个叫Go的扩展插件</p>
+<p><img src="blog/posts/227/assets/11.png" class="img-fluid" alt="" /></p>
+<p>然后，建立src目录，以后所有的代码工程就都放在这里了</p>
+<p><img src="blog/posts/227/assets/12.png" class="img-fluid" alt="" /></p>
+<p>我们在src下面随便建立一个xx.go的文件，然后随便打几个字（最后记得把这个文件删掉）之后，我们发现，VSCode的右下角弹出了一堆弹窗</p>
+<p><img src="blog/posts/227/assets/13.png" class="img-fluid" alt="" /></p>
+<p>随便点其中某个Install All</p>
+<p><img src="blog/posts/227/assets/14.png" class="img-fluid" alt="" /></p>
+<p>开始安装这个扩展所需的各种插件工具。</p>
+<p>不过，很遗骸，由于网络等原因，我们没法很愉快的完成安装。</p>
+<p><img src="blog/posts/227/assets/15.png" class="img-fluid" alt="" /></p>
+<p>有几个安装成功了，不过大部分都安装失败了</p>
+<p>所以接下来就是重点了</p>
+<p>首先，在src目录下建立“golang.org/x”目录</p>
+<p><img src="blog/posts/227/assets/16.png" class="img-fluid" alt="" /></p>
+<p>然后把 <a href="https://github.com/golang/tools">https://github.com/golang/tools</a> 这个仓库clone进去</p>
+<p>顺便把 <a href="https://github.com/golang/lint">https://github.com/golang/lint</a> 这个仓库clone进去</p>
+<p>大概就是这样</p>
+<p><img src="blog/posts/227/assets/17.png" class="img-fluid" alt="" /></p>
+<p>然后挨个安装之前没安装成功的东西</p>
+<ul>
+<li>go install github.com/mdempsky/gocode</li>
+<li>go install github.com/ramya-rao-a/go-outline</li>
+<li>go install github.com/acroca/go-symbols</li>
+<li>go install golang.org/x/tools/cmd/guru</li>
+<li>go install golang.org/x/tools/cmd/gorename</li>
+<li>go install github.com/stamblerre/gocode</li>
+<li>go install github.com/rogpeppe/godef</li>
+</ul>

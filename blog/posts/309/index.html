@@ -1,0 +1,52 @@
+﻿<p>在Unity的新版本中，有个挺大的变化就是：Project Setting的一堆配置项从Inspector中独立出来，单独弄了一个窗口。</p>
+<p><img src="blog/posts/309/assets/1.png" class="img-fluid" alt="" /></p>
+<p>实际上，我们也可以把自己游戏里的一些配置工具，也给整到这个窗口里面去。</p>
+<h3 id="section">需求</h3>
+<p>在我写的一个Unity开发框架中， 有很多配置文件(继承自ScriptableObject类的.asset文件)。众所周知，Unity上编辑.asset配置文件的方法特别诡异：你得在Project窗口里选中这个文件，然后它的配置内容就会出现在Inspector窗口上。</p>
+<p>这样的问题是，比如说你需要往配置文件里填一个文件名，然后你去找这个文件在哪，然后右键这个文件复制它的路径…… 好了现在问题来了，你在去找文件的操作中，你刚刚选择的那个配置文件就失焦了（不再是activeObject了），于是Inspector上也就没有配置选项了。</p>
+<p>“诶我刚刚配置一半的东西哪去了”，然后你还得再回来在一堆文件夹中找到刚刚的配置文件，选中它。</p>
+<p>一次两次还能忍，如果要配置很多东西进去，是不是就得骂人了。</p>
+<p>于是，在一开始，我们的解决方法是，用Odin插件写一个窗口，把开发框架里的一堆配置文件归整到一起来。</p>
+<p><img src="blog/posts/309/assets/2.png" class="img-fluid" alt="" /></p>
+<p>就像这样，其实和Unity新出的Project Settings窗口功能和结构都差不多。（那么我为什么要自己搞一个呢，因为我做这个窗口的时候，Unity还没新出这个功能。</p>
+<p>这个窗口其实本质上也还是在操作那一堆.asset配置文件。</p>
+<p>然而Odin是个付费插件，如果我们想把我们的开发框架分享给团队之外的人使用的话，就出现问题了。所以渐渐的，就有了一个诉求：让我们的开发框架脱离Odin之后也能使用。</p>
+<p>正好最近Unity2019发布了，灵机一动：诶，要不我们让开发框架在监测到工程里没有Odin插件的时候，把配置文件都整合到这个新出的Project Settings窗口里试试呗。于是，随着一通折腾，就有了这么个文章。</p>
+<blockquote class="blockquote">
+<p>其实Project Settings独立窗口是2018.3就开始有的功能，不是2019的新功能。但是被Unity搞怕了，新功能默认推迟一个版本再去用。</p>
+</blockquote>
+<p>我们来看看最终效果（我就先实现了一个）：</p>
+<p><img src="blog/posts/309/assets/3.png" class="img-fluid" alt="" /></p>
+<h2 id="section-1">开始实现</h2>
+<p>首先，得定义一个配置文件的类（其实就是普通的ScriptableObject类，里面搞了一堆#if 的判断是为了让它在没有Odin插件的时候也能工作，无视即可。</p>
+<p><img src="blog/posts/309/assets/4.png" class="img-fluid" alt="" /></p>
+<p>然后，我们需要在编辑器下（Editor目录）重新定义一个类，用来告诉Unity的编辑器：“我要在你的设置窗口里显示东西！”</p>
+<p>一个简单的结构如下：</p>
+<p><img src="blog/posts/309/assets/5.png" class="img-fluid" alt="" /></p>
+<p>其实乍一看，原理很像<code>[MenuItem(xxxxx)]</code>那种定义方法，倒确实是Unity的一贯风格。</p>
+<p>在一个静态类下，使用<code>SettingProviderAttribute</code>这个attribute来标记一个静态方法（强调：静态方法，和定义menu一样），这个方法要返回一个<code>SettingProvider</code>的对象。</p>
+<p>然后我们看看效果：</p>
+<p><img src="blog/posts/309/assets/6.png" class="img-fluid" alt="" /></p>
+<p>可以看到，我们定义的设置项已经起作用了，但是里面什么都没有。有一个叫“喵”的配置项在Project Settings窗口的Project目录下，这个地方是因为我们定义的路径是“Project/喵”，和菜单的玩法一样，如果我们不以<code>Project/</code>开头的话，它就会成为一个顶级目录。</p>
+<p>接下来，我们来往里面填内容。在官方文档里，有三种方法：</p>
+<ol>
+<li>IMGUI方式</li>
+<li>UIElement方式</li>
+<li>用一个子类继承SettingsProvider类</li>
+</ol>
+<p>这里我们使用IMGUI方式，（因为暂时不想写css，小布局没必要搞那么复杂。</p>
+<p>代码写好后如下：</p>
+<p><img src="blog/posts/309/assets/7.png" class="img-fluid" alt="" /></p>
+<p>嗯，所以看起来，其实挺好理解的，就是一个经典的编辑器UI写法的魔改版。就和平时写编辑器UI时候一样，在OnGUI方法里用“GUILayout/EditorGUIlayout”类绘制UI一样。</p>
+<p>那么到此为止，一个自定义的设置项就做好了。</p>
+<p>(其实在Preferences窗口里自定义内容，也是同样的原理 。</p>
+<blockquote class="blockquote">
+<p>当然，举一反三：UIElement的写法就是在<code>activateHandler</code>这个回调里面初始化 UIElement的代码咯。</p>
+<p>顺便一说，activateHandler 的参数 <code>rootElement</code> ，如果它里面有了子元素的话，Unity就认为这是采用UIElement方式绘制UI，那么guiHandler这个回调就会被无视，不会触发了。</p>
+<p>(由于UIElement也是新功能，很多人可能还没开始接触。如果你不知道这里说的是啥的话，直接无视就好了。</p>
+</blockquote>
+<hr />
+<p>说句题外话，自定义设置项的方法挺好理解的，就和做编辑器UI一样，但是闹心的地方也在这儿了。相当于你得自己写GUI再把.asset配置文件里的配置项再挨个实现一遍。太繁琐了。</p>
+<p>相比之下，Odin插件实现的窗口就比较省事了，拿到.asset文件的对象之后，它可以自己去反射里面的配置项和调整布局。开头截图的那个窗口，核心代码就是下面几句话。</p>
+<p><img src="blog/posts/309/assets/8.png" class="img-fluid" alt="" /></p>
+<p>我总觉得Unity应该把Odin买下来内置进编辑器，Unity编辑器自带的各种东西太蠢了。</p>

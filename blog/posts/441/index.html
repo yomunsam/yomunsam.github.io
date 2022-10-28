@@ -1,0 +1,29 @@
+﻿<p>自从有了Unity Hub之后，Android 开发环境的配置变得非常简单，你几乎什么都不用管，在Unity Hub里点三个勾就完事了。</p>
+<p><img src="blog/posts/441/assets/1.webp" class="img-fluid" alt="" /></p>
+<p>但是，令人不愉快的是，并不是所有的情况下Unity Hub的安装方式都会起作用（比如当你想安装一个指定版本的Unity Editor而Unity Hub并没有提供这个版本下载的时候）。这时候就得手动配置Android开发环境了。</p>
+<p>Unity 下的Android开发环境基本上与原生开发无异，首先是Java的JDK环境，然后是Android 的SDK，由于要处理Cpp，所以还有一个NDK环境。</p>
+<p>但是问题来了，JDK和Android SDK和Unity之间的版本的各种关系非常混乱，（比如Android SDK目前无法在JDK13版本下工作）。</p>
+<p>所以这里介绍一个讨巧的方法。</p>
+<br>
+<p>首先，利用Unity Hub安装一个Unity Editor.</p>
+<p>比如说，我们统一了Unity的版本是Unity 2019.2.0f1</p>
+<p><img src="blog/posts/441/assets/2.webp" class="img-fluid" alt="" /></p>
+<p>但是通过Unity Hub安装我们会发现，Unity Hub只提供了Unity 2019.2.x的最新版本，并没有Unity 2019.2.0f1</p>
+<p><img src="blog/posts/441/assets/3.webp" class="img-fluid" alt="" /></p>
+<p>所以当我们需要使用Unity 2019.2.0f1时，只能从官网安装，但是官网安装的编辑器是没法通过Unity Hub来添加Android环境组件的。</p>
+<p><img src="blog/posts/441/assets/4.webp" class="img-fluid" alt="" /></p>
+<p>那就没办法了，直接先安装Unity 2019.2.8f1（当前同版本号2.x的最新版本）（尽量安装大版本号一致的版本）</p>
+<p>安装好之后，我们就能看到“添加模块”这个选项了。</p>
+<p><img src="blog/posts/441/assets/5.webp" class="img-fluid" alt="" /></p>
+<br>
+<h2 id="unity-hubandroid">用Unity Hub安装一个Android 环境</h2>
+<p>这一步简单了，直接在刚才安装好的版本的Unity Editor中勾选这三个模块，等待Hub安装完成。</p>
+<p><img src="blog/posts/441/assets/6.webp" class="img-fluid" alt="" /></p>
+<p>然后，复制大法</p>
+<p>只要是通过Unity Hub安装了Android环境的版本，我们定位到安装路径下的这个路径：<code>Editor/Data/PlaybackEngines/AndroidPlayer</code></p>
+<p><img src="blog/posts/441/assets/7.webp" class="img-fluid" alt="" /></p>
+<p>然后我们就看到我们需要的几个环境了，接下来，把NDK，OpenJDK，SDK三个目录直接复制到我们需要的引擎版本的安装目录的相同位置。</p>
+<p>然后我们发现Unity直接自己识别出来了，可以说是非常省事了。</p>
+<p><img src="blog/posts/441/assets/8.webp" class="img-fluid" alt="" /></p>
+<p>（ps：其实我没复制OpenJDK目录，但是编辑器也识别出来了，估计Unity可以共享这个吧，但是NDK和SDK是不行的。）</p>
+<p><strong>（后续发现，OpenJDK还是得拷过去，不然会出问题）</strong></p>
