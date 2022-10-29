@@ -1,0 +1,69 @@
+﻿<p><img src="blog/posts/256/assets/1.png" class="img-fluid" alt="" title="Nekopara" /></p>
+<p>在游戏中，我们总是会见到上图这种剧情对话功能，它在很多尤其中，尤其是galgame中，起着重要的作用。</p>
+<p>那么，这样的系统，要怎么做呢，</p>
+<p>我们可以大致分为两部分：</p>
+<ol>
+<li>对话剧情的编写</li>
+<li>运行编写好的剧情内容</li>
+</ol>
+<p>其实在我看来，做这么一套系统，最大的难点，其实是在第一条：怎么设计一套编写剧情对话的东西。</p>
+<p>在我这种典型的程序员的视角来看，直接拿Lua脚本写剧情就非常棒，比如这样</p>
+<pre><code class="language-lua">local dialogue = {}
+local Mgr = XCore.Drama.DialogueManager;
+
+
+dialogue[1] = Mgr.Say(&quot;史莱姆&quot;,&quot;我也是个广东人，所以我们是老乡&quot;);
+dialogue[2] = Mgr.Say(&quot;哥布林&quot;,&quot;花~Q&quot;);
+dialogue[3] = Mgr.Say(&quot;史莱姆&quot;,&quot;oh, 花可U,Leather Man~&quot;);
+
+return dialogue;
+</code></pre>
+<p>这样对于程序员来说，显然是最爽的，你甚至不用刻意去解析它，拿到数据之后直接就可以运行了。但是问题是，一般在做游戏的时候，都不是程序员去编写剧情脚本的，而是文案啊、策划啊之类的。你让非程序工作者去直接写Lua，先不说会不会出错，他们肯定会先想着怎么把程序员打一顿的。</p>
+<p>所以，这样是行不通的，那有没有其他方案呢。</p>
+<br>
+<hr />
+<p>诶，好像我工作的公司的项目中就有对话系统，我去看看他们是怎么弄的。然后，我们看到他们把所有对话文本，都配在了Excel中。</p>
+<p><img src="blog/posts/256/assets/2.png" class="img-fluid" alt="" /></p>
+<p>emmm，乍一看好像没问题，但是遇到选择项的时候，这么操作就非常繁琐了。</p>
+<p>比如：</p>
+<p>史莱姆：“我也是个广东人，所以我们是老乡”。</p>
+<p>请选择操作：</p>
+<ol>
+<li>“ 花~Q! ”</li>
+<li>“雷猴啊”</li>
+<li>不理她</li>
+</ol>
+<p>那么，在这样一个选项中，每个选项之后，会有不同的对话内容，甚至还有不同的选项对角色的某些属性的影响。（比如选择“ 花~Q! ”会让史莱姆对自己的好感度+10 这类的功能）</p>
+<p>这样的话，Excel配表格这种操作，就显得有很大局限性了。（那为什么我司的项目用Excel呢，我问了下，他们说游戏里不可能有太过复杂的剧情对话，但是对于做Galgame之类的情况，就完全不够用了）。</p>
+<br>
+<hr />
+<p>于是，接下来，我们来看看网络上有什么不错的解决方案，然后，我找到了这个：Ink语言。</p>
+<p>ink是由inkle公司推出的一种脚本式的文字预处理语言用来编写一些对话类游戏的对话内容及流程图。 写起来大概是这样：</p>
+<pre><code>史莱姆：我也是个广东人，所以我们是老乡。
+请选择操作：
+* “花~Q!” [] oh, 花可U,Leather Man~
+* “两开花！两开花！”
+</code></pre>
+<p>这套语言设计的就很棒了，功能强大，写起来也还不错，甚至，它有专门的Unity插件来解析ink语言：<a href="https://assetstore.unity.com/packages/tools/integration/ink-unity-integration-60055">https://assetstore.unity.com/packages/tools/integration/ink-unity-integration-60055</a></p>
+<p>于是呢，我就把这玩意给拿给我们文案看了，文案表示，这个好像还是有挺高的学习成本诶，而且看着也不是很直观。有点乱乱的。</p>
+<hr />
+<p>然后，我就自己撸了一套，长这样</p>
+<p><img src="blog/posts/256/assets/3.png" class="img-fluid" alt="" /></p>
+<p>嗯，利用图表节点来描述对话流程。</p>
+<p><img src="blog/posts/256/assets/4.png" class="img-fluid" alt="" /></p>
+<p>在节点图表中，你可以直接通过连线的方向，复用之前的节点</p>
+<p>运行如下：</p>
+<p><img src="blog/posts/256/assets/5.png" class="img-fluid" alt="" /></p>
+<p>分支选项:</p>
+<p><img src="blog/posts/256/assets/6.png" class="img-fluid" alt="" title="分支选项" /></p>
+<p>两开花选项:
+<img src="blog/posts/256/assets/7.png" class="img-fluid" alt="" title="两开花选项" /></p>
+<p>再次回到分支选项时，设定为“只能选择一次”的两开花选项消失:
+<img src="blog/posts/256/assets/8.png" class="img-fluid" alt="" /></p>
+<p>此外，配合一些参数绑定的功能，和事件广播的功能，一个简单的对话系统就做好了。</p>
+<hr />
+<blockquote class="blockquote">
+<p>开源引用<br />
+CatLib: <a href="https://catlib.io/">CatLib - 文档</a></p>
+<p>xNode : <a href="https://assetstore.unity.com/packages/tools/visual-scripting/xnode-104276">xNode - Asset Store</a></p>
+</blockquote>
