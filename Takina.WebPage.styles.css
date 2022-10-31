@@ -14,16 +14,17 @@
 }
 /* /Pages/Index.razor.rz.scp.css */
 .main-cover[b-o4glogc3o0] {
-    max-height: 24rem;
+    max-height: 32rem;
+    /*height:28rem;*/
     object-fit: cover;
     object-position: 50% 26%;
 }
 
-/*@media (max-width: 768px) {
-    .main-cover {
+@media (max-width: 768px) {
+    .main-cover[b-o4glogc3o0] {
         height: 24rem;
     }
-}*/
+}
 /* /Pages/Post/Index.razor.rz.scp.css */
 .post-card[b-k8nry1m3ny] {
     border-radius: .45rem;
